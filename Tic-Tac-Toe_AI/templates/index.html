@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>4x4 Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>TIC-TAC-TOE 4X4</h1>
+  <p>A wise man once said,"No one can win this AI."</p>
+  <h2 id="status">YOU GO FIRST!</h2>
+  <div class="board" id="board"></div>
+
+  <script>
+    const size = 4;
+    let board = Array(size).fill().map(() => Array(size).fill(""));
+    const boardDiv = document.getElementById("board");
+    const status = document.getElementById("status");
+
+    function render() {
+      boardDiv.innerHTML = '';
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.textContent = board[i][j];
+          cell.onclick = () => playerMove(i, j);
+          boardDiv.appendChild(cell);
+        }
+      }
+    }
+
+    function playerMove(i, j) {
+      if (board[i][j] !== '') return;
+      board[i][j] = 'X';
+      render();
+      fetch('/move', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ board: board })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const [ai_i, ai_j] = data.aiMove;
+        if (ai_i !== -1) board[ai_i][ai_j] = 'O';
+        render();
+        if (data.winner) {
+    status.textContent = data.winner + (data.winner === 'Draw' ? '!' : ' wins!');
+    setTimeout(() => {
+      alert(data.winner + (data.winner === 'Draw' ? '' : ' wins!'));
+      location.reload();
+    }, 1500);
+}
+
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+body {
+    font-family: monospace;
+    text-align: center;
+    background: linear-gradient(to bottom, #570ede, #db401e);
+    color: #fff3c2;
+  }
+  
+  h1, h2 {
+    margin: 0.5em;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    margin: auto;
+    justify-content: center;
+  }
+  
+  .cell {
+    width: 80px;
+    height: 80px;
+    background: white;
+    color: black;
+    font-size: 40px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
